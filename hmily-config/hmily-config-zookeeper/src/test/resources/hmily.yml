@@ -6,7 +6,7 @@ hmily:
 
 remote:
   zookeeper:
-    serverList: 127.0.0.1:2181
+    serverList: 192.168.3.21:2181
     fileExtension: yml
     path: /hmily/config
     passive: true

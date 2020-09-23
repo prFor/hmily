@@ -19,25 +19,19 @@
 
 package org.dromara.hmily.config.nacos;
 
-import org.dromara.hmily.common.utils.FileUtils;
 import org.dromara.hmily.common.utils.StringUtils;
 import org.dromara.hmily.config.api.ConfigEnv;
 import org.dromara.hmily.config.api.ConfigScan;
-import org.dromara.hmily.config.api.entity.*;
+import org.dromara.hmily.config.api.event.EventConsumer;
+import org.dromara.hmily.config.api.event.ModifyData;
 import org.dromara.hmily.config.loader.ConfigLoader;
 import org.dromara.hmily.config.loader.ServerConfigLoader;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.io.ByteArrayInputStream;
 import java.util.function.Supplier;
-
-import static org.mockito.ArgumentMatchers.any;
 
 /**
  * The type Nacos config loader test.
@@ -54,6 +48,7 @@ public class NacosConfigLoaderOnlineTest {
     @Test
     public void testNacosLoad() throws InterruptedException {
         ConfigScan.scan();
+//        ConfigEnv.getInstance().addEvent(new MyConsumer());
         ServerConfigLoader loader = new ServerConfigLoader();
         NacosConfigLoader nacosConfigLoader = new NacosConfigLoader();
         loader.load(ConfigLoader.Context::new, (context, config) -> {
@@ -72,5 +67,17 @@ public class NacosConfigLoaderOnlineTest {
     private void assertTest(final Supplier<ConfigLoader.Context> supplier, final NacosConfig nacosConfig) {
 
     }
-    
+
+    class MyConsumer implements EventConsumer<ModifyData> {
+
+        @Override
+        public void accept(ModifyData modifyData) {
+            System.out.println("数据.s" + modifyData.getConfig());
+        }
+
+        @Override
+        public String regex() {
+            return "hmily.config.*";
+        }
+    }
 }

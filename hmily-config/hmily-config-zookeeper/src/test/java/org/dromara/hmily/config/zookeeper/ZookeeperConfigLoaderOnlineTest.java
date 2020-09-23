@@ -74,7 +74,7 @@ public class ZookeeperConfigLoaderOnlineTest {
             }
 
             @Override
-            public String properties() {
+            public String regex() {
                 return "hmily.config.*";
             }
         });
